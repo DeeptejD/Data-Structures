@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include <stdlib.h>
+#include <string.h>
 struct Library
 {
     int accessionNumber;
@@ -61,6 +62,27 @@ void displayBookInfo(struct Library lib[], int *count){
     }
 }
 
+void listallauth(struct Library lib[], int *count){
+    char auth[30];
+    getchar();
+    printf("Enter the name of the author: ");
+    gets(auth);
+    for (int i = 0; i < *count; i++)
+    {
+        if (strcmp(auth, lib[i].author)==0)     
+        {
+            printf("-----------------------\nAccession number: %d\nTitle: %s\nAuthor: %s\nPrice: %.2f\n", lib[i].accessionNumber, lib[i].title, lib[i].author, lib[i].price);
+            if(lib[i].flag){
+                printf("The books has been issued\n");
+            } else{
+                printf("The book has not been issued\n-----------------------\n");
+            }
+        }
+        
+    }
+    
+}
+
 int main(int argc, char const *argv[])
 {
     int count=0;
@@ -68,7 +90,7 @@ int main(int argc, char const *argv[])
 
     printf("===========\nABC Library\n===========\n");
     while(1){
-        printf("Enter the number corresponding to the choice of operation\n");
+        printf("\nEnter the number corresponding to the choice of operation\n");
         int choice;
         printf("1. Add book info\n2. Display Book info\n3. List all the books of a given author\n");
         printf("4. List the title of a specified book\n5. List the count of the books\n6. List the books in the order of accession number\n7. exit\n\n");
@@ -86,7 +108,8 @@ int main(int argc, char const *argv[])
             break;
         
         case 3:
-            //list all the books by a given author
+            //list all the books by a given  author
+            listallauth(lib, &count);
             break;
         
         case 4:
