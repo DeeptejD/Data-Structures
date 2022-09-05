@@ -24,22 +24,42 @@ void addBookInfo(struct Library lib[], int *count){
     
     for (int i = *count; i < *count+numberOfBooks; i++)
     {
-        printf("Enter the accession number: ");
-        scanf("%d", &lib->accessionNumber);
+        printf("-------------------------\nEnter the accession number: ");
+        scanf("%d", &lib[i].accessionNumber);
         getchar();
         printf("Enter title: ");
-        gets(lib->title);
+        gets(lib[i].title);
         printf("Enter author: ");
         getchar();
-        gets(lib->author);
+        gets(lib[i].author);
         printf("Enter price: ");
-        scanf("%f", &lib->price);
+        scanf("%f", &lib[i].price);
+        printf("Is the books issued?\n");
+        do
+        {
+            printf("Enter '0' for NOT issued or '1' for issued\n");
+            scanf("%d", &lib[i].flag);
+        } while (lib[i].flag>1 || lib[i].flag<0);
+        
     }
-    printf("%d book(s) added succesfully\n", numberOfBooks);
+    printf("\n%d book(s) added succesfully\n\n", numberOfBooks);
     *count+=numberOfBooks;
 }
 
-
+void displayBookInfo(struct Library lib[], int *count){
+    if(count==0){
+        printf("The Library is empty\n");
+        return;
+    }
+    for(int i=0;i<(*count);i++){
+        printf("-----------------------\nAccession number: %d\nTitle: %s\nAuthor: %s\nPrice: %.2f\n", lib[i].accessionNumber, lib[i].title, lib[i].author, lib[i].price);
+        if(lib[i].flag){
+            printf("The books has been issued\n");
+        } else{
+            printf("The book has not been issued\n-----------------------\n");
+        }
+    }
+}
 
 int main(int argc, char const *argv[])
 {
@@ -62,10 +82,11 @@ int main(int argc, char const *argv[])
         
         case 2:
             // display book info
+            displayBookInfo(lib, &count);
             break;
         
         case 3:
-            //list all the books by a gievn author
+            //list all the books by a given author
             break;
         
         case 4:
