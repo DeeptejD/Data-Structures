@@ -1,4 +1,3 @@
-// polynomial addition using linked lists
 #include <stdio.h>
 #include <stdlib.h>
 struct node
@@ -28,33 +27,33 @@ int main()
 }
 struct node *create(struct node *start)
 {
-	struct node *new_node, *ptr;
+	struct node *tmp, *ptr;
 	int num, i;
 	printf("Enter the number of terms: ");
 	scanf("%d", &num);
 	for (i = 0; i < num; i++)
 	{
-		new_node = (struct node *)malloc(sizeof(struct node));
+		tmp = (struct node *)malloc(sizeof(struct node));
 		printf("Enter the coefficient: ");
-		scanf("%d", &new_node->coeff);
+		scanf("%d", &tmp->coeff);
 		printf("Enter the exponent: ");
-		scanf("%d", &new_node->exp);
-		new_node->next = NULL;
+		scanf("%d", &tmp->exp);
+		tmp->next = NULL;
 		if (start == NULL)
-			start = new_node;
+			start = tmp;
 		else
 		{
 			ptr = start;
 			while (ptr->next != NULL)
 				ptr = ptr->next;
-			ptr->next = new_node;
+			ptr->next = tmp;
 		}
 	}
 	return start;
 }
 struct node *add(struct node *p1, struct node *p2)
 {
-	struct node *start3, *new_node, *ptr;
+	struct node *start3, *tmp, *ptr;
 	int sum;
 	start3 = NULL;
 	while (p1 != NULL && p2 != NULL)
@@ -64,18 +63,18 @@ struct node *add(struct node *p1, struct node *p2)
 			sum = p1->coeff + p2->coeff;
 			if (sum != 0)
 			{
-				new_node = (struct node *)malloc(sizeof(struct node));
-				new_node->coeff = sum;
-				new_node->exp = p1->exp;
-				new_node->next = NULL;
+				tmp = (struct node *)malloc(sizeof(struct node));
+				tmp->coeff = sum;
+				tmp->exp = p1->exp;
+				tmp->next = NULL;
 				if (start3 == NULL)
-					start3 = new_node;
+					start3 = tmp;
 				else
 				{
 					ptr = start3;
 					while (ptr->next != NULL)
 						ptr = ptr->next;
-					ptr->next = new_node;
+					ptr->next = tmp;
 				}
 			}
 			p1 = p1->next;
@@ -83,70 +82,70 @@ struct node *add(struct node *p1, struct node *p2)
 		}
 		else if (p1->exp > p2->exp)
 		{
-			new_node = (struct node *)malloc(sizeof(struct node));
-			new_node->coeff = p1->coeff;
-			new_node->exp = p1->exp;
-			new_node->next = NULL;
+			tmp = (struct node *)malloc(sizeof(struct node));
+			tmp->coeff = p1->coeff;
+			tmp->exp = p1->exp;
+			tmp->next = NULL;
 			if (start3 == NULL)
-				start3 = new_node;
+				start3 = tmp;
 			else
 			{
 				ptr = start3;
 				while (ptr->next != NULL)
 					ptr = ptr->next;
-				ptr->next = new_node;
+				ptr->next = tmp;
 			}
 			p1 = p1->next;
 		}
 		else
 		{
-			new_node = (struct node *)malloc(sizeof(struct node));
-			new_node->coeff = p2->coeff;
-			new_node->exp = p2->exp;
-			new_node->next = NULL;
+			tmp = (struct node *)malloc(sizeof(struct node));
+			tmp->coeff = p2->coeff;
+			tmp->exp = p2->exp;
+			tmp->next = NULL;
 			if (start3 == NULL)
-				start3 = new_node;
+				start3 = tmp;
 			else
 			{
 				ptr = start3;
 				while (ptr->next != NULL)
 					ptr = ptr->next;
-				ptr->next = new_node;
+				ptr->next = tmp;
 			}
 			p2 = p2->next;
 		}
 	}
 	while (p1 != NULL)
 	{
-		new_node = (struct node *)malloc(sizeof(struct node));
-		new_node->coeff = p1->coeff;
-		new_node->exp = p1->exp;
-		new_node->next = NULL;
+		tmp = (struct node *)malloc(sizeof(struct node));
+		tmp->coeff = p1->coeff;
+		tmp->exp = p1->exp;
+		tmp->next = NULL;
 		if (start3 == NULL)
-			start3 = new_node;
+			start3 = tmp;
 		else
 		{
 			ptr = start3;
 			while (ptr->next != NULL)
 				ptr = ptr->next;
-			ptr->next = new_node;
+			ptr->next = tmp;
 		}
 		p1 = p1->next;
 	}
 	while (p2 != NULL)
 	{
-		new_node = (struct node *)malloc(sizeof(struct node));
-		new_node->coeff = p2->coeff;
-		new_node->exp = p2->exp;
-		new_node->next = NULL;
+		tmp = (struct node *)malloc(sizeof(struct node));
+		tmp->coeff = p2->coeff;
+		tmp->exp = p2->exp;
+		tmp->next = NULL;
 		if (start3 == NULL)
-			start3 = new_node;
+			start3 = tmp;
 		else
 		{
 			ptr = start3;
 			while (ptr->next != NULL)
 				ptr = ptr->next;
-			ptr->next = new_node;
+			ptr->next = tmp;
 		}
 		p2 = p2->next;
 	}
