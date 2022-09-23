@@ -14,6 +14,7 @@ void modify(struct node *start);
 struct node *addatpos(struct node *, int, int, int);
 struct node *del(struct node *, int, int);
 
+
 int main()
 {
 	while (1)
@@ -62,6 +63,7 @@ int main()
 
 	return 0;
 }
+
 struct node *create(struct node *start)
 {
 	struct node *tmp, *ptr;
@@ -328,3 +330,5 @@ struct node *del(struct node *start, int coeff, int exp)
 	}
 	return start;
 }
+
+
