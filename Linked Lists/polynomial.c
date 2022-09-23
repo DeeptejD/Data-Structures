@@ -13,9 +13,9 @@ void display(struct node *);
 int main()
 {
 	struct node *p1 = NULL, *p2 = NULL, *p3 = NULL;
-	printf("Enter the first polynomial: ");
+	printf("Enter the first polynomial\n");
 	p1 = create(p1);
-	printf("Enter the second polynomial: ");
+	printf("Enter the second polynomial\n");
 	p2 = create(p2);
 	p3 = add(p1, p2);
 	printf("The first polynomial is: ");
