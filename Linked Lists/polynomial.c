@@ -13,48 +13,57 @@ struct node *multiply(struct node *, struct node *);
 void modify(struct node *start);
 struct node *addatpos(struct node *, int, int, int);
 struct node *del(struct node *, int, int);
-
-
+struct node *addatend(struct node *, int, int);
 int main()
 {
+	struct node *p1 = NULL, *p2 = NULL, *p3 = NULL;
+	printf("Polynomial Arithmetic\n");
+	printf("Enter the first polynomial\n");
+	p1 = create(p1);
+	printf("Enter the second polynomial\n");
+	p2 = create(p2);
+	printf("The first polynomial is: ");
+	display(p1);
+	printf("The second polynomial is: ");
+	display(p2);
 	while (1)
 	{
-		struct node *p1 = NULL, *p2 = NULL, *p3 = NULL;
 		int choice;
-		printf("Polynomial Arithmetic\n1.Add\n2.Multiply\n3.Modify\n4.Exit\n");
+		int select;
+		printf("1.Add\n2.Multiply\n3.Modify\n4.Display\n5.Exit\n");
 		scanf("%d", &choice);
 		switch (choice)
 		{
 		case 1:
-			printf("Enter the first polynomial\n");
-			p1 = create(p1);
-			printf("Enter the second polynomial\n");
-			p2 = create(p2);
 			p3 = add(p1, p2);
-			printf("The first polynomial is: ");
-			display(p1);
-			printf("The second polynomial is: ");
-			display(p2);
 			printf("The sum of the two polynomials is: ");
 			display(p3);
 			break;
 		case 2:
-			printf("Enter the first polynomial\n");
-			p1 = create(p1);
-			printf("Enter the second polynomial\n");
-			p2 = create(p2);
-			printf("The first polynomial is: ");
-			display(p1);
-			printf("The second polynomial is: ");
-			display(p2);
 			p3 = multiply(p1, p2);
 			printf("The product of the two polynomials is: ");
 			display(p3);
 			break;
 		case 3:
-			modify(p3);
+			printf("Which polynomial do you want to modify?\n1.First Polynomial\n2.Second Polynomial\n");
+			scanf("%d", &select);
+			switch (select)
+			{
+			case 1:
+				modify(p1);
+				break;
+			case 2:
+				modify(p2);
+				break;
+			default:
+				break;
+			}
 			break;
 		case 4:
+			display(p1);
+			display(p2);
+			break;
+		case 5:
 			exit(1);
 		default:
 			break;
@@ -291,7 +300,7 @@ struct node *addatpos(struct node *start, int coeff, int exp, int pos)
 		for (int i = 1; i < pos - 1 && ptr != NULL; i++)
 			ptr = ptr->next;
 		if (ptr == NULL)
-			printf("There are less than %d elements\n", pos);
+			start = addatend(start, coeff, exp);
 		else
 		{
 			tmp->next = ptr->next;
@@ -304,6 +313,7 @@ struct node *addatpos(struct node *start, int coeff, int exp, int pos)
 struct node *del(struct node *start, int coeff, int exp)
 {
 	struct node *tmp, *p;
+	tmp = (struct node *)malloc(sizeof(struct node));
 	if (start == NULL)
 	{
 		printf("Polynomial is empty\n");
@@ -331,4 +341,16 @@ struct node *del(struct node *start, int coeff, int exp)
 	return start;
 }
 
-
+struct node *addatend(struct node *start, int coeff, int exp)
+{
+	struct node *p = start;
+	while (p->next != NULL)
+		p = p->next;
+	struct node *tmp;
+	tmp = (struct node *)malloc(sizeof(struct node));
+	tmp->coeff = coeff;
+	tmp->exp = exp;
+	tmp->next = NULL;
+	p->next = tmp;
+	return start;
+}
