@@ -113,7 +113,6 @@ void evalPostfix(char postfix[])
     {
         if (postfix[i] >= '0' && postfix[i] <= '9')
         {
-            // printf("%d\n", postfix[i]-'0');
             tmpstack[++ttop] = postfix[i] - '0';
         }
         else
@@ -121,7 +120,6 @@ void evalPostfix(char postfix[])
             int a, b, temp;
             a = tmpstack[ttop--];
             b = tmpstack[ttop--];
-            // printf("a is %d b is %d\n", a,b);
             switch (postfix[i])
             {
             case '+':
@@ -151,29 +149,19 @@ void evalPostfix(char postfix[])
 
 void evalPrefix(char prefix[])
 {
-    char reverse[strlen(prefix)];
-    int r = 0;
-    // reverse prefix
-    for (int i = strlen(prefix) - 1; i >= 0; i--)
-    {
-        reverse[r++] = prefix[i];
-    }
-    reverse[r] = '\0';
     int tmpstack[MAX], ttop = -1;
-    for (int i = 0; reverse[i] != '\0'; i++)
+    for (int i = strlen(prefix) - 1; i>=0; i--)
     {
-        if (reverse[i] >= '0' && reverse[i] <= '9')
+        if (prefix[i] >= '0' && prefix[i] <= '9')
         {
-            // printf("%d\n", postfix[i]-'0');
-            tmpstack[++ttop] = reverse[i] - '0';
+            tmpstack[++ttop] = prefix[i] - '0';
         }
         else
         {
             int a, b, temp;
             a = tmpstack[ttop--];
             b = tmpstack[ttop--];
-            // printf("a is %d b is %d\n", a,b);
-            switch (reverse[i])
+            switch (prefix[i])
             {
             case '+':
                 temp = a + b;
@@ -197,7 +185,7 @@ void evalPrefix(char prefix[])
             tmpstack[++ttop] = temp;
         }
     }
-    printf("The value of the postfix expression is: %d\n", tmpstack[ttop]);
+    printf("The value of the prefix expression is: %d\n", tmpstack[ttop]);
 }
 
 int main()
