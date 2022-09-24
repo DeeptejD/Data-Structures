@@ -108,13 +108,13 @@ void toPrefix(char infix[], char prefix[])
 
 void evalPostfix(char postfix[])
 {
-    int tmpstack[MAX], ttop=-1;
+    int tmpstack[MAX], ttop = -1;
     for (int i = 0; i < strlen(postfix); i++)
     {
         if (postfix[i] >= '0' && postfix[i] <= '9')
         {
             // printf("%d\n", postfix[i]-'0');
-            tmpstack[++ttop]=postfix[i]-'0';
+            tmpstack[++ttop] = postfix[i] - '0';
         }
         else
         {
@@ -143,22 +143,61 @@ void evalPostfix(char postfix[])
                 temp = pow(b, a);
                 break;
             }
-            tmpstack[++ttop]=temp;
+            tmpstack[++ttop] = temp;
         }
     }
-    printf("The value of the expression is: %d\n", tmpstack[ttop]);
+    printf("The value of the postfix expression is: %d\n", tmpstack[ttop]);
 }
 
-void evalPrefix(char prefix[]){
+void evalPrefix(char prefix[])
+{
     char reverse[strlen(prefix)];
     int r = 0;
-    // reverse infix
+    // reverse prefix
     for (int i = strlen(prefix) - 1; i >= 0; i--)
     {
         reverse[r++] = prefix[i];
     }
-    printf("%s\n",reverse);
-    evalPostfix(reverse);
+    reverse[r] = '\0';
+    int tmpstack[MAX], ttop = -1;
+    for (int i = 0; reverse[i] != '\0'; i++)
+    {
+        if (reverse[i] >= '0' && reverse[i] <= '9')
+        {
+            // printf("%d\n", postfix[i]-'0');
+            tmpstack[++ttop] = reverse[i] - '0';
+        }
+        else
+        {
+            int a, b, temp;
+            a = tmpstack[ttop--];
+            b = tmpstack[ttop--];
+            // printf("a is %d b is %d\n", a,b);
+            switch (reverse[i])
+            {
+            case '+':
+                temp = a + b;
+                break;
+            case '-':
+                temp = a - b;
+                break;
+            case '*':
+                temp = a * b;
+                break;
+            case '/':
+                temp = a / b;
+                break;
+            case '%':
+                temp = a % b;
+                break;
+            case '^':
+                temp = pow(a, b);
+                break;
+            }
+            tmpstack[++ttop] = temp;
+        }
+    }
+    printf("The value of the postfix expression is: %d\n", tmpstack[ttop]);
 }
 
 int main()
