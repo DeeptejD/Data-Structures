@@ -374,11 +374,11 @@ struct node *addatend(struct node *start, int coeff, int exp)
 	return start;
 }
 
-struct node create_using_file(struct node *start)
+struct node *create_using_file(struct node *start)
 {
 	struct node *tmp, *ptr;
 	int num, i;
-	File *fptr;
+	FILE *fptr;
 	if ((fptr = fopen("input.txt", "r")) == NULL)
 	{
 		printf("The file could not be opened\n");
@@ -388,17 +388,18 @@ struct node create_using_file(struct node *start)
 	for (i = 0; i < num; i++)
 	{
 		tmp = (struct node *)malloc(sizeof(struct node));
-		fscanf(fptr, "%d", &tmp->coeff);
-		fscanf(fptr, "%d", &tmp->exp);
-		tmp->next = NULL;
-		if (start == NULL)
-			start = tmp;
-		else
+		fscanf(fptr, "%d %d", &tmp->coeff, &tmp->exp)
 		{
-			ptr = start;
-			while (ptr->next != NULL)
-				ptr = ptr->next;
-			ptr->next = tmp;
+			tmp->next = NULL;
+			if (start == NULL)
+				start = tmp;
+			else
+			{
+				ptr = start;
+				while (ptr->next != NULL)
+					ptr = ptr->next;
+				ptr->next = tmp;
+			}
 		}
 	}
 	return start;
