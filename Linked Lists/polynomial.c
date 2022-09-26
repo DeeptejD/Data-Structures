@@ -14,18 +14,37 @@ void modify(struct node *start);
 struct node *addatpos(struct node *, int, int, int);
 struct node *del(struct node *, int, int);
 struct node *addatend(struct node *, int, int);
+struct node *create_using_file(struct node *);
+
 int main()
 {
 	struct node *p1 = NULL, *p2 = NULL, *p3 = NULL;
-	printf("Polynomial Arithmetic\n");
-	printf("Enter the first polynomial\n");
-	p1 = create(p1);
-	printf("Enter the second polynomial\n");
-	p2 = create(p2);
-	printf("The first polynomial is: ");
-	display(p1);
-	printf("The second polynomial is: ");
-	display(p2);
+	printf("Select mode of input\n1.Manual\n2.From a file\n");
+	int mode;
+	scanf("%d", &mode);
+	switch (mode)
+	{
+	case 1:
+		printf("Polynomial Arithmetic\n");
+		printf("Enter the first polynomial\n");
+		p1 = create(p1);
+		printf("Enter the second polynomial\n");
+		p2 = create(p2);
+		printf("The first polynomial is: ");
+		display(p1);
+		printf("The second polynomial is: ");
+		display(p2);
+		break;
+	case 2:
+		create_using_file(p1);
+		display(p1);
+		create_using_file(p2);
+		display(p2);
+		break;
+	default:
+		printf("Invalid input entered\n");
+		break;
+	}
 	while (1)
 	{
 		int choice;
@@ -352,5 +371,35 @@ struct node *addatend(struct node *start, int coeff, int exp)
 	tmp->exp = exp;
 	tmp->next = NULL;
 	p->next = tmp;
+	return start;
+}
+
+struct node create_using_file(struct node *start)
+{
+	struct node *tmp, *ptr;
+	int num, i;
+	File *fptr;
+	if ((fptr = fopen("input.txt", "r")) == NULL)
+	{
+		printf("The file could not be opened\n");
+		exit(1);
+	}
+	fscanf(fptr, "%d", &num);
+	for (i = 0; i < num; i++)
+	{
+		tmp = (struct node *)malloc(sizeof(struct node));
+		fscanf(fptr, "%d", &tmp->coeff);
+		fscanf(fptr, "%d", &tmp->exp);
+		tmp->next = NULL;
+		if (start == NULL)
+			start = tmp;
+		else
+		{
+			ptr = start;
+			while (ptr->next != NULL)
+				ptr = ptr->next;
+			ptr->next = tmp;
+		}
+	}
 	return start;
 }
