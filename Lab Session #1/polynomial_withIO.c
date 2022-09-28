@@ -14,7 +14,8 @@ void modify(struct node *start);
 struct node *addatpos(struct node *, int, int, int);
 struct node *del(struct node *, int, int);
 struct node *addatend(struct node *, int, int);
-struct node *create_using_file(struct node *);
+struct node *create1(struct node *);
+struct node *create2(struct node *);
 
 int main()
 {
@@ -36,9 +37,9 @@ int main()
 		display(p2);
 		break;
 	case 2:
-		create_using_file(p1);
+		p1=create1(p1);
 		display(p1);
-		create_using_file(p2);
+		p2=create2(p2);
 		display(p2);
 		break;
 	default:
@@ -374,12 +375,16 @@ struct node *addatend(struct node *start, int coeff, int exp)
 	return start;
 }
 
-struct node *create_using_file(struct node *start)
+struct node *create1(struct node *start)
 {
 	struct node *tmp, *ptr;
+	start = NULL;
 	int num, i;
+	int coef, exp;
+
 	FILE *fptr;
-	if ((fptr = fopen("input.txt", "r")) == NULL)
+
+	if ((fptr = fopen("input1.txt", "r")) == NULL)
 	{
 		printf("The file could not be opened\n");
 		exit(1);
@@ -388,19 +393,57 @@ struct node *create_using_file(struct node *start)
 	for (i = 0; i < num; i++)
 	{
 		tmp = (struct node *)malloc(sizeof(struct node));
-		fscanf(fptr, "%d %d", &tmp->coeff, &tmp->exp)
+		fscanf(fptr, "%d %d", &coef, &exp);
+		tmp->coeff = coef;
+		tmp->exp = exp;
+		// printf("\n%d %d\n", tmp->coeff, tmp->exp);
+		tmp->next = NULL;
+		if (start == NULL)
+			start = tmp;
+		else
 		{
-			tmp->next = NULL;
-			if (start == NULL)
-				start = tmp;
-			else
-			{
-				ptr = start;
-				while (ptr->next != NULL)
-					ptr = ptr->next;
-				ptr->next = tmp;
-			}
+			ptr = start;
+			while (ptr->next != NULL)
+				ptr = ptr->next;
+			ptr->next = tmp;
 		}
 	}
+	fclose(fptr);
+	return start;
+}
+
+struct node *create2(struct node *start)
+{
+	struct node *tmp, *ptr;
+	start = NULL;
+	int num, i;
+	int coef, exp;
+
+	FILE *fptr;
+
+	if ((fptr = fopen("input2.txt", "r")) == NULL)
+	{
+		printf("The file could not be opened\n");
+		exit(1);
+	}
+	fscanf(fptr, "%d", &num);
+	for (i = 0; i < num; i++)
+	{
+		tmp = (struct node *)malloc(sizeof(struct node));
+		fscanf(fptr, "%d %d", &coef, &exp);
+		tmp->coeff = coef;
+		tmp->exp = exp;
+		tmp->next = NULL;
+		if (start == NULL)
+			start = tmp;
+		else
+		{
+			ptr = start;
+			while (ptr->next != NULL)
+				ptr = ptr->next;
+			ptr->next = tmp;
+		}
+	}
+	fclose(fptr);
 	return start;
 }
