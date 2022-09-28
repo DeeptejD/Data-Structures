@@ -1,54 +1,71 @@
-#include <time.h>
 #include <stdio.h>
-#include<dos.h>
+#include <stdlib.h>
+#include <time.h>
 
-#define MAX 100
+#define MAX_TASK 5
+#define TOTAL_TASKS 10
 
 struct TASK
 {
-    int taskId;
-    char taskTitle[MAX];
-    int taskDuration; // in seconds
-    int status;       // 0: idle 1: scheduled 3: completed
+    int TaskID;
+    char TaskTitle[100];
+    int duration;
+    int status; // 0 for idle, 1 for queued and 2 for completed
+};
+
+void delay(int time){
+    int time_ms=1000*time;
+    clock_t start = clock();
+    while(clock()<start+time_ms){
+        printf(". ");
+    }
+    printf("\n");
 }
 
-struct TASK task_arr[10];                // holds tasks
-int available_tasks = 10;                // idle tasks that cn be scheduled
-struct TASK task_queue[10];              // scheduled tasks
-int rear = -1, front = -1, curr_max = 5; // curr max after tasks are completed
-int slots = 5;                           // slots in queue
-
-void schedule_task();
-void run_task();
-void display_tasks();
+void display(struct TASK []);
+void schedule(struct TASK[], struct TASK[]);
+void run(struct TASK [], struct TASK []);
+int isFull();
+int isEmpty();
+int currentMax = 5;
+int front = -1, rear = -1;
 
 int main(int argc, char const *argv[])
 {
+    struct TASK tasks[10];
+    int currentMAX = 5;
+    struct TASK task_arr[currentMAX];
 
-    FILE *fptr;
-    if ((fptr = fopen("tasks.txt", "r")) == NULL)
+    FILE *f;
+    if ((f = fopen("tasks.txt", "r")) == NULL)
     {
-        printf("File could not be opened\n");
-        exit(1);
+        printf("The file could not be opened\n");
+        exit(EXIT_FAILURE);
     }
-    for (int i = 0; i <= 10; i++)
-        fscanf(fptr, "%d %s %d %d", &task_arr[i].taskId, task_arr[i].taskTitle, &task_arr[i].taskDuration, &task_arr[i].status);
+    for (int i = 0; i < 10; i++)
+    {
+        fscanf(f, "%d %s %d %d", tasks[i].TaskID, tasks[i].TaskTitle, tasks[i].duration, tasks[i].status);
+    }
     while (1)
     {
+        printf("Select the task operation\n1.Schedule\n2.Run the tasks\n3.Display\n4.Exit\n");
         int choice;
-        printf("Enter the choice: ");
-        printf("1.Schedule\n2.Run\n3.Display\n");
         scanf("%d", &choice);
         switch (choice)
         {
         case 1:
-            schedule_task();
+            schedule(tasks, task_arr);
             break;
         case 2:
+            run();
             break;
         case 3:
+            display();
             break;
+        case 4:
+            exit(EXIT_SUCCESS);
         default:
+            printf("Invalid i/p\n");
             break;
         }
     }
@@ -57,9 +74,7 @@ int main(int argc, char const *argv[])
 
 int isFull()
 {
-    if (rear == curr_max - 1)
-        return 1;
-    return 0;
+    rear == MAX - 1 ? return 1 : return 0;
 }
 
 int isEmpty()
@@ -69,73 +84,75 @@ int isEmpty()
     return 0;
 }
 
-void schedule_task(int id)
+void schedule(struct TASK task_arr[], struct TASK queue[])
 {
-    if (isFull() || available_tasks == 0)
+    if (isFull())
     {
-        printf("No more tasks can be scheduled\n");
+        int maxwait = 0;
+        for (int i = 0; i < currentMax; i++)
+            maxwait += queue[i].duration;
+        printf("Please wait. Min wating time: %d seconds\nMax waiting time: %d seconds\n", task_arr[rear].duration, maxwait);
         return;
     }
-    printf("Here are the available tasks to be scheduled\n");
+
+    printf("Enter the task ID: ");
+    int ID;
+    scanf("%d", &ID);
     for (int i = 0; i < 10; i++)
     {
-        if (task_arr[i].status == 0)
-            printf("Id: %d, Title: %s\n", task_arr[i].taskId, task_arr[i].taskTitle);
-    }
-    int id, n;
-    printf("Enter the number of tasks to be scheduled\n");
-    scanf("%d", &n);
-    if (n > available_tasks || n > slots)
-    {
-        if (n > slots)
+        if (ID == task_arr[i].TaskID)
         {
-            n = slots;
-            break;
-        }
-        printf("There are only %d tasks to be scheduled\n", available_tasks);
-        n = available_tasks;
-    }
-
-    for (int i = 1; i <= n; i++)
-    {
-        printf("Enter the id of the task to be scheduled: ");
-        scanf("%d", &id);
-        for (int i = 0; i < 10; i++)
-        {
-            if (id == task_arr[i].taskId)
+            if (task_arr[i].status != 0)
             {
-                if (task_arr[i].status != 0)
+                printf("Task cannot be scheduled\nReason: ");
+                switch (task_arr[i].status)
                 {
-                    printf("That task can't be scheduled\n");
+                case 1:
+                    printf("Task already Scheduled\n");
+                    return;
+                case 2:
+                    printf("Task Completed\n");
+                default:
                     return;
                 }
-                else
-                {
-                    if (rear == -1)
-                        front = 0;
-                    rear++, curr_max++;
-                    task_queue[rear].taskId = task_arr[i].taskId;
-                    task_queue[rear].taskTitle = task_arr[i].taskTitle;
-                    task_queue[rear].taskDuration = task_arr[i].taskDuration;
-                    task_queue[rear].status = 1;
-                    task_arr[i].status = 1;
-                    printf("Task has been scheduled succesfully!\nAvailable slots: %d\n", --slots);
-                    return;
-                }
+                return;
             }
+            if (front == -1)
+                front = 0;
+            rear += 1;
+            queue[rear].duration=task_arr[i].duration;
+            queue[rear].TaskTitle=task_arr[i].TaskTitle;
+            queue[rear].TaskID=task_arr[i].TaskID;
+            queue[rear].status=task_arr[i].status;
+            task_arr[i].TaskID=1;
+            printf("Task successfully scheduled\n");
+            return;
         }
     }
+    printf("Task not found\n");
+    return;
 }
 
-void run_task()
-{
-    if (isEmpty())
-    {
-        printf("No tasks have been scheduled\nSchedule one!\n");
-        schedule_task();
+void run(struct TASK queue[], struct TASK task_arr[]){
+    printf("Running Task: %s\n", queue[rear].TaskTitle);
+    delay(queue[rear].duration);
+    front=front+1;
+    currentMax+=1;
+    for(int i=0;i<10;i++){
+        if(queue[rear].TaskID==task_arr[i].TaskID){
+            task_arr[i].status=2;
+        }
     }
-    while (!isEmpty())
-    {
-        
+    printf("Task completed!\n");
+}
+
+void display(struct TASK queue[]){
+    if(isEmpty()){
+        printf("No tasks scheduled!\n");
+        return;
+    }
+    printf("Tasks scheduled are\n");
+    for(int i=front;i<=rear;i++){
+        printf("ID: %d\nTitle: %s\n", queue[i].TaskID, queue[i].TaskTitle);
     }
 }
