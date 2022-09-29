@@ -17,7 +17,6 @@ void schedule(struct TASK tasks[], struct TASK queue[]);
 void run(struct TASK[], struct TASK[]);
 int isFull();
 int isEmpty();
-void DoProgress(char label[], int step, int total);
 
 int currentMax = 5;
 int front = -1, rear = -1;
