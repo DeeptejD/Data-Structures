@@ -14,9 +14,10 @@ struct TASK
 void delay(int time);
 void display(struct TASK queue[]);
 void schedule(struct TASK tasks[], struct TASK queue[]);
-void run(struct TASK [], struct TASK []);
+void run(struct TASK[], struct TASK[]);
 int isFull();
 int isEmpty();
+void DoProgress(char label[], int step, int total);
 
 int currentMax = 5;
 int front = -1, rear = -1;
@@ -34,7 +35,7 @@ int main(int argc, char const *argv[])
         exit(1);
     }
     for (int i = 0; i < 10; i++)
-        fscanf(f, "%d %s %d %d", tasks[i].TaskID, tasks[i].TaskTitle, tasks[i].duration, tasks[i].status);
+        fscanf(f, "%d %s %d %d", &tasks[i].TaskID, tasks[i].TaskTitle, &tasks[i].duration, &tasks[i].status);
     fclose(f);
 
     while (1)
@@ -69,9 +70,7 @@ void delay(int time)
     clock_t start = clock();
     while (clock() < start + time_ms)
     {
-        printf(". ");
     }
-    printf("\n");
 }
 
 int isFull()
@@ -119,17 +118,15 @@ void schedule(struct TASK task[], struct TASK queue[])
                 default:
                     return;
                 }
-                return;
             }
             if (front == -1)
                 front = 0;
             rear += 1;
             queue[rear].duration = task[i].duration;
-
             queue[rear].TaskID = task[i].TaskID;
+            task[i].status = 1;
             queue[rear].status = task[i].status;
             strcpy(queue[rear].TaskTitle, task[i].TaskTitle);
-            task[i].TaskID = 1;
             printf("Task successfully scheduled\n");
             return;
         }
@@ -140,17 +137,27 @@ void schedule(struct TASK task[], struct TASK queue[])
 
 void run(struct TASK queue[], struct TASK task[])
 {
-    printf("Running Task: %s\n", queue[rear].TaskTitle);
-    delay(queue[rear].duration);
+    printf("Running Task: %s\n", queue[front].TaskTitle);
+    for (int i = 0; i < 5; i++)
+    {
+        printf(".");
+        delay(1);
+    }
+    delay(queue[front].duration);
     front = front + 1;
     currentMax += 1;
-    for (int i = 0; i < 10; i++){
-        if (queue[rear].TaskID == task[i].TaskID)
+    for (int i = 0; i < 10; i++)
+    {
+        if (queue[front].TaskID == task[i].TaskID)
         {
             task[i].status = 2;
         }
-}
- printf("Task completed!\n");   
+    }
+    for (int i = 0; i <= 10000; i++)
+    {
+        printf("\rIn progress %d", i / 100);
+    }
+    printf("\nTask completed!\n");
 }
 
 void display(struct TASK queue[])
@@ -165,4 +172,5 @@ void display(struct TASK queue[])
     {
         printf("ID: %d\nTitle: %s\n", queue[i].TaskID, queue[i].TaskTitle);
     }
+    printf("\n");
 }
