@@ -73,7 +73,26 @@ struct node *pop()
     return item;
 }
 
-
+// PREORDER
+void nrec_pre(struct node *root)
+{
+    struct node *ptr=root;
+    if(root==NULL)
+    {
+        printf("The tree is empty\n");
+        return;
+    }
+    push(ptr);
+    while(!isEmpty())
+    {
+        ptr=pop();
+        printf("%3d", ptr->info);
+        if(ptr->LC!=NULL)
+            push(ptr->LC);
+        if(ptr->RC!=NULL)
+            push(ptr->RC);
+    }
+}
 
 // NON recursive traversals END
 
