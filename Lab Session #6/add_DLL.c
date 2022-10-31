@@ -82,50 +82,19 @@ int numnodes(struct node *start)
     return count;
 }
 
-// struct node *add(struct node *num1, struct node *num2, struct node *result)
-// {
-//     struct node *ptr1, *ptr2;
-//     if (numnodes(num1) >= numnodes(num2))
-//     {
-//         ptr1 = num1;
-//         ptr2 = num2;
-//     }
-//     else
-//     {
-//         ptr1 = num2;
-//         ptr2 = num1;
-//     }
-
-//     while (ptr1 != NULL || ptr2 != NULL)
-//     {
-//         int sum = ptr1->info + ptr2->info;
-//         if (sum > 9)
-//         {
-//             result = addatbeg(result, sum % 10);
-//             sum/=10;
-//             ptr1->next->info += sum;
-//             ptr1 = ptr1->next;
-//             ptr2 = ptr2->next;
-//         }
-//         else
-//         {
-//             result = addatbeg(result, sum);
-//             ptr1 = ptr1->next;
-//             ptr2 = ptr2->next;
-//         }
-//     }
-//     while (ptr1 != NULL)
-//     {
-//         addatbeg(result, ptr1->info);
-//         ptr1 = ptr1->next;
-//     }
-//     while (ptr2 != NULL)
-//     {
-//         addatbeg(result, ptr2->info);
-//         ptr2 = ptr2->next;
-//     }
-//     return result;
-// }
+void printrev(struct node *ptr)
+{
+    if (ptr == NULL)
+    {
+        printf("The list is empty lol\n");
+        return;
+    }
+    while (ptr->next != NULL)
+        ptr = ptr->next;
+    while (ptr != NULL)
+        printf("%d", ptr->info), ptr = ptr->prev;
+    printf("\n");
+}
 
 struct node *add(struct node *num1, struct node *num2, struct node *result)
 {
@@ -149,7 +118,7 @@ struct node *add(struct node *num1, struct node *num2, struct node *result)
         result = addatbeg(result, sum % 10);
         sum /= 10;
         if (ptr1->next != NULL)
-            ptr1->next->info += sum * 10;
+            ptr1->next->info += sum;
         else
         {
             result = addatend(result, sum);
@@ -165,7 +134,26 @@ struct node *add(struct node *num1, struct node *num2, struct node *result)
     while (ptr1 != NULL)
     {
         sum = ptr1->info + ptr2->info;
+        if (sum > 9)
+        {
+            result = addatend(result, sum % 10);
+            sum /= 10;
+            if (ptr1->next != NULL)
+                ptr1->next->info += sum;
+            else
+            {
+                result = addatend(result, sum);
+                return;
+            }
+        }
+        else
+        {
+            result = addatend(result, sum);
+        }
+        ptr1 = ptr1->next;
+        ptr2 = ptr2->next;
     }
+    return result;
 }
 
 int main(int argc, char const *argv[])
@@ -188,6 +176,6 @@ int main(int argc, char const *argv[])
     struct node *results = NULL;
     results = add(num1, num2, results);
     printf("The sum of the two numbers is: ");
-    display(results);
+    printrev(results);
     return 0;
 }

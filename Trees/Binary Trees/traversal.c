@@ -106,21 +106,26 @@ void nrec_in(struct node *root)
     struct node *ptr = root;
     while (1)
     {
-        while(ptr->LC!=NULL)
+        while (ptr->LC != NULL)
         {
             push(ptr);
-            ptr=ptr->LC;
+            ptr = ptr->LC;
         }
-        while(ptr->RC==NULL)
+        while (ptr->RC == NULL)
         {
             printf("%3d", ptr->info);
-            if(isEmpty())
+            if (isEmpty())
                 return;
-            ptr=pop();
+            ptr = pop();
         }
         printf("%3d", ptr->info);
-        ptr=ptr->RC;
+        ptr = ptr->RC;
     }
+}
+
+void nrec_post(struct node *root)
+{d
+
 }
 // NON recursive traversals END
 
