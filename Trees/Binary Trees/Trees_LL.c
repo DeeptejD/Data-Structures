@@ -130,6 +130,36 @@ void nrec_inorder(struct node *root)
     printf("\n");
 }
 
+// NON RECURSIVE POSTORDER
+void nrec_post(struct node *root)
+{
+    if (root == NULL)
+    {
+        printf("The tree is empty\n");
+        return;
+    }
+    struct node *ptr = root, *p = root;
+    while (1)
+    {
+        while (ptr->lchild != NULL)
+        {
+            push(ptr->lchild); // push left child
+            ptr = ptr->lchild; // move left
+        }
+        while (ptr->rchild == NULL || ptr->rchild == p /*checks if the right child has been traversed*/)
+        {
+            printf("%3c", ptr->data); // visit popped node
+            p = ptr;                  // keep track of traversed node
+            if (top == -1)            // check if stack is empty
+                return;
+            ptr = pop(); // pop next node in the stack
+        }
+        push(ptr);         // push popped node back in the stack
+        ptr = ptr->rchild; // move right
+    }
+    printf("\n");
+}
+
 // Non-Recursive Traversals End---
 
 int main(int argc, char const *argv[])
