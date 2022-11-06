@@ -26,7 +26,7 @@ struct listnode
 };
 
 // CONSTRUCT A NODE USING INORDER AND PREORDER
-struct treenode *construct(struct listnode *inptr, struct listnode *preptr, int num)
+struct treenode *construct_in_pre(struct listnode *inptr, struct listnode *preptr, int num)
 {
     if (num == 0)    // if we have no nodes remaining u=in the list
         return NULL; // return NULL
@@ -51,6 +51,34 @@ struct treenode *construct(struct listnode *inptr, struct listnode *preptr, int 
     for (j = 1; j <= i + 1; j++)
         preptr = preptr->next;                                // we move preptr so it only points to the portion that has the preorder of the right subtree
     temp->rchild = construct(ptr->next, preptr, num - i - 1); // we use num-i-1 because we need to exclude all the nodes on the left and the root node
+}
+
+// Construct a tree from inorder and postorder
+struct treenode *construct_in_post(struct listnode *inptr, struct listnode *postptr, int num)
+{
+    if (num == 0)
+        return NULL;
+    struct treenode *temp;
+    struct listnode *ptr = postptr, *q = inptr;
+    while (ptr->next != NULL)
+        ptr = ptr->next;
+    if ((temp = (struct treenode *)malloc(sizeof(struct treenode))) == NULL)
+    {
+        printf("No memory\n");
+        exit(EXIT_FAILURE);
+    }
+    temp->info = ptr->info;
+    temp->lchild = NULL;
+    temp->rchild = NULL;
+    if (num == 1)
+        return temp;
+    // ptr now pnts to the last node in the list
+    int i, j;
+    for (i = 0; q->info != ptr->info; i++)
+        q = q->next;
+    temp->lchild = construct_in_post(inptr, postptr, i);
+    temp->rchild = construct_in_post(q->next, postptr, num - i - 1);
+    return temp;
 }
 
 //---
