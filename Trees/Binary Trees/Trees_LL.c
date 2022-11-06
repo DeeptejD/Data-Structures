@@ -2,6 +2,7 @@
 // Preorder : NLR   //
 // Postorder: LRN   //
 // Inorder  : LNR   //
+// Level Order      //
 // *****************//
 
 #include <stdio.h>
@@ -20,7 +21,7 @@ struct node *root;
 // Recursive Traversals
 
 // PREORDER
-void *preorder(struct node *ptr)
+void preorder(struct node *ptr)
 {
     if (ptr == NULL)
         return;
@@ -30,7 +31,7 @@ void *preorder(struct node *ptr)
 }
 
 // POSTORDER
-void *postorder(struct node *ptr)
+void postorder(struct node *ptr)
 {
     if (ptr == NULL)
         return;
@@ -40,7 +41,7 @@ void *postorder(struct node *ptr)
 }
 
 // INORDER
-void *inorder(struct node *ptr)
+void inorder(struct node *ptr)
 {
     if (ptr == NULL)
         return;
@@ -161,6 +162,62 @@ void nrec_post(struct node *root)
 }
 
 // Non-Recursive Traversals End---
+
+// Level Order Traversal---
+
+struct node *queue[MAX];
+int front = -1, rear = -1;
+
+void insert(struct node *ptr)
+{
+    if (rear == MAX - 1)
+    {
+        printf("Queue Overflow\n");
+        return;
+    }
+    if (front == -1) // initial state
+        front = 0;
+    queue[++rear] = ptr;
+}
+
+struct node *del()
+{
+    if (front == -1 || front == rear + 1)
+    {
+        printf("Queue underflow\n");
+        exit(EXIT_FAILURE);
+    }
+    struct node *item = queue[front++];
+    return item;
+}
+
+int Q_empty()
+{
+    return (front == -1 || front == rear + 1);
+}
+
+void level_order(struct node *root)
+{
+    if (root == NULL)
+    {
+        printf("Tree is Empty\n");
+        return;
+    }
+    struct node *ptr = root;
+    insert(ptr);
+    while (!Q_empty())
+    {
+        ptr = del();
+        printf("%3c", ptr->data);
+        if (ptr->lchild != NULL)
+            insert(ptr->lchild);
+        if (ptr->rchild != NULL)
+            insert(ptr->rchild);
+    }
+    printf("\n");
+}
+
+// Level Order Traversal End---
 
 int main(int argc, char const *argv[])
 {
