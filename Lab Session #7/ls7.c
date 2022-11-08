@@ -141,7 +141,70 @@ int height(struct treenode *ptr)
     return right + 1;
 }
 
-int main(int argc, char const *argv[])
+int finddepth(struct treenode *root, int x)
+{
+    if (root == NULL)
+        return -1;
+    int depth = -1;
+    if (root->info == x || (depth = finddepth(root->rchild, x)) >= 0 || (depth = finddepth(root->lchild, x)) >= 0)
+        return depth + 1;
+}
+
+#define MAX 100
+struct treenode *queue[MAX];
+int front = -1, rear = -1;
+
+void insert(struct treenode *node)
+{
+    if (rear == MAX - 1)
+    {
+        printf("Q overflow\n");
+        return;
+    }
+    if (front == -1)
+        front = 0;
+    queue[++rear] = node;
+}
+
+struct treenode *delnode()
+{
+    if (front == -1 || front == rear + 1)
+    {
+        printf("Q undeflow\n");
+        exit(1);
+    }
+    struct treenode *temp = queue[front++];
+    return temp;
+}
+
+int isEmpty()
+{
+    return (front == -1 || front == rear + 1);
+}
+
+void levelOrder(struct treenode *root)
+{
+    if (root == NULL)
+    {
+        printf("The tree is empty\n");
+        return;
+    }
+    struct treenode *ptr = root;
+    insert(ptr);
+    printf("The Level-Order Traversal is: ");
+    while (!isEmpty())
+    {
+        ptr = delnode();
+        printf("%3d", ptr->info);
+        if (ptr->lchild != NULL)
+            insert(ptr->lchild);
+        if (ptr->rchild != NULL)
+            insert(ptr->rchild);
+    }
+    printf("\n");
+}
+
+int main()
 {
     int num;
     struct listnode *inorder = NULL, *postorder = NULL;
@@ -156,6 +219,7 @@ int main(int argc, char const *argv[])
     display(inorder, postorder, root);
     while (1)
     {
+        int node;
         printf("Choose from the options below\n1. Find height of the tree\n2. Find the depth of a given node\n3. Perform Level Order Traversal\n4. Perform Spiral Traversal\n5. Exit\n");
         int choice;
         scanf("%d", &choice);
@@ -164,7 +228,18 @@ int main(int argc, char const *argv[])
         case 1:
             printf("The height of the tree is: %d\n", height(root));
             break;
-
+        case 2:
+            printf("Enter the node: ");
+            scanf("%d", &node);
+            printf("The depth of the node is: %d\n", finddepth(root, node));
+            break;
+        case 3:
+            levelOrder(root);
+            break;
+        case 4:
+            break;
+        case 5:
+            exit(0);
         default:
             break;
         }
