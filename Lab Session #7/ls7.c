@@ -204,6 +204,123 @@ void levelOrder(struct treenode *root)
     printf("\n");
 }
 
+struct treenode *stack1[MAX], *stack2[MAX];
+int top1 = -1, top2 = -1;
+
+void push1(struct treenode *ptr)
+{
+    if (top1 == MAX - 1)
+    {
+        printf("Stack overflow\n");
+        exit(1);
+    }
+    stack1[++top1] = ptr;
+}
+
+void push2(struct treenode *ptr)
+{
+    if (top2 == MAX - 1)
+    {
+        printf("Stack overflow\n");
+        exit(1);
+    }
+    stack2[++top2] = ptr;
+}
+
+struct treenode *pop1()
+{
+    if (top1 == -1)
+    {
+        printf("Stack underflow\n");
+        exit(1);
+    }
+    struct treenode *ptr = stack1[top1--];
+    return ptr;
+}
+
+struct treenode *pop2()
+{
+    if (top2 == -1)
+    {
+        printf("Stack underflow\n");
+        exit(1);
+    }
+    struct treenode *ptr = stack2[top2--];
+    return ptr;
+}
+
+// void spiral(struct treenode *root)
+// {
+//     if (root == NULL)
+//     {
+//         printf("Empty tree\n");
+//         return;
+//     }
+//     push1(NULL), push2(NULL);
+//     push1(root);
+
+//     while (stack1[top1] != NULL || stack2[top2] != NULL)
+//     {
+//         if (stack1[top1] == NULL)
+//         {
+//             while (stack2[top2] != NULL)
+//             {
+//                 struct treenode *element = stack2[top2--];
+//                 printf("%3d", element->info);
+//                 if (element->rchild != NULL)
+//                     push1(element->rchild);
+//                 if (element->lchild != NULL)
+//                     push1(element->rchild);
+//             }
+//         }
+//         else
+//         {
+//             while (stack1[top1] != NULL)
+//             {
+//                 struct treenode *element = stack1[top1--];
+//                 printf("%3d", element->info);
+//                 if (element->rchild != NULL)
+//                     push2(element->rchild);
+//                 if (element->lchild != NULL)
+//                     push2(element->rchild);
+//             }
+//         }
+//     }
+//     printf("\n");
+// }
+
+void left_to_right(struct treenode *root, int level)
+{
+    if (root != NULL)
+    {
+        if (level == 1)
+        {
+            printf("%3d", root->info);
+        }
+        else if (level > 1)
+        {
+            left_to_right(root->lchild, level - 1);
+            left_to_right(root->rchild, level - 1);
+        }
+    }
+}
+
+void right_to_left(struct treenode *root, int level)
+{
+    if (root != NULL)
+    {
+        if (level == 1)
+        {
+            printf("%3d", root->info);
+        }
+        else
+        {
+            right_to_left(root->rchild, level - 1);
+            right_to_left(root->lchild, level - 1);
+        }
+    }
+}
+
 int main()
 {
     int num;
@@ -237,7 +354,18 @@ int main()
             levelOrder(root);
             break;
         case 4:
-            break;
+        {
+            int flag, h = height(root);
+            for (int i = 1; i <= h; i++)
+            {
+                if (i % 2 == 0)
+                    right_to_left(root, i);
+                else
+                    left_to_right(root, i);
+            }
+            printf("\n");
+        }
+        break;
         case 5:
             exit(0);
         default:
