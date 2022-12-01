@@ -26,7 +26,6 @@ int main()
 	switch (mode)
 	{
 	case 1:
-		printf("Polynomial Arithmetic\n");
 		printf("Enter the first polynomial\n");
 		p1 = create(p1);
 		printf("Enter the second polynomial\n");
