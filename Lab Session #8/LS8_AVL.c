@@ -549,10 +549,15 @@ void visit_all(struct node *root, int *maximum, int *minimum)
 void max_min(struct node *root)
 {
     int maximum, minimum;
-
-    visit_all(root, &maximum, &minimum);
-
-    printf("MAX: %d and MIN: %d\n", maximum, minimum);
+    struct node *ptr = root;
+    while (ptr->left != NULL)
+        ptr = ptr->left;
+    minimum = ptr->info;
+    ptr = root;
+    while (ptr->right != NULL)
+        ptr = ptr->right;
+    maximum = ptr->info;
+    printf("Min: %d, Max: %d\n", minimum, maximum);
 }
 
 void decreasing(struct node *root)
