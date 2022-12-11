@@ -16,17 +16,17 @@ int main(int argc, char const *argv[])
     int incr;
     printf("Enter max increment: ");
     scanf("%d", &incr);
-    int i, j;
+    int i, j, k;
     while (incr >= 1)
     {
-        int k = arr[incr];
-        j = i - incr;
         for (i = incr; i < n; i++)
         {
-            while (j >= 0 && k < arr[j])
-            {
-                        }
+            k = arr[i];
+            for (j = i - incr; j >= 0 && k < arr[j]; j = j - incr)
+                arr[j + incr] = arr[j];
+            arr[j + incr] = k;
         }
+        incr = incr - 2;
     }
 
     return 0;
