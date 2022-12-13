@@ -125,20 +125,151 @@ void display()
     printf("\n");
 }
 
+// bfs using adjacency list
+
 void BFT()
 {
+    int visited[n];
+    for (int i = 0; i < n; i++)
+    {
+        visited[i] = 0;
+    }
+    struct vertex *ptr = start;
+    struct edge *ed;
+    int queue[n], front = -1, rear = -1;
+    while (ptr != NULL)
+    {
+        if (visited[ptr->info] == 0)
+        {
+            printf("%d ", ptr->info);
+            visited[ptr->info] = 1;
+            queue[++rear] = ptr->info;
+            while (front != rear)
+            {
+                int temp = queue[++front];
+                ed = findvertex(temp)->firstedge;
+                while (ed != NULL)
+                {
+                    if (visited[ed->destvertex->info] == 0)
+                    {
+                        printf("%d ", ed->destvertex->info);
+                        visited[ed->destvertex->info] = 1;
+                        queue[++rear] = ed->destvertex->info;
+                    }
+                    ed = ed->nextedge;
+                }
+            }
+        }
+        ptr = ptr->nextvertex;
+    }
 }
 
-void BFS()
-{
-}
+// dfs using adjacency list
 
 void DFT()
 {
+    int visited[n];
+    for (int i = 0; i < n; i++)
+    {
+        visited[i] = 0;
+    }
+    struct vertex *ptr = start;
+    struct edge *ed;
+    int stack[n], top = -1;
+    while (ptr != NULL)
+    {
+        if (visited[ptr->info] == 0)
+        {
+            printf("%d ", ptr->info);
+            visited[ptr->info] = 1;
+            stack[++top] = ptr->info;
+            while (top != -1)
+            {
+                int temp = stack[top];
+                ed = findvertex(temp)->firstedge;
+                while (ed != NULL)
+                {
+                    if (visited[ed->destvertex->info] == 0)
+                    {
+                        printf("%d ", ed->destvertex->info);
+                        visited[ed->destvertex->info] = 1;
+                        stack[++top] = ed->destvertex->info;
+                        break;
+                    }
+                    ed = ed->nextedge;
+                }
+                if (ed == NULL)
+                {
+                    top--;
+                }
+            }
+        }
+        ptr = ptr->nextvertex;
+    }
 }
 
-void DFS()
+void deleteedge(int u, int v)
 {
+    struct vertex *locu = findvertex(u), *locv = findvertex(v);
+    if (locu == NULL)
+    {
+        printf("Start vertex not present\n");
+        return;
+    }
+    if (locv == NULL)
+    {
+        printf("Destination vertex not present\n");
+        return;
+    }
+    struct edge *ed = locu->firstedge, *prev = NULL;
+    while (ed != NULL)
+    {
+        if (ed->destvertex == locv)
+        {
+            if (prev == NULL)
+            {
+                locu->firstedge = ed->nextedge;
+            }
+            else
+            {
+                prev->nextedge = ed->nextedge;
+            }
+            free(ed);
+            return;
+        }
+        prev = ed;
+        ed = ed->nextedge;
+    }
+    printf("Edge not present\n");
+}
+
+void deletevertex(int u)
+{
+    struct vertex *locu = findvertex(u);
+    if (locu == NULL)
+    {
+        printf("Vertex not present\n");
+        return;
+    }
+    struct vertex *ptr = start, *prev = NULL;
+    while (ptr != NULL)
+    {
+        if (ptr == locu)
+        {
+            if (prev == NULL)
+            {
+                start = ptr->nextvertex;
+            }
+            else
+            {
+                prev->nextvertex = ptr->nextvertex;
+            }
+            free(ptr);
+            return;
+        }
+        prev = ptr;
+        ptr = ptr->nextvertex;
+    }
 }
 
 int main(int argc, char const *argv[])
@@ -155,7 +286,7 @@ int main(int argc, char const *argv[])
     int v, sv, ev;
     do
     {
-        printf("Choose an option\n1. Add a vertex\n2. Add an edgee\n3. BFS\n4. DFS\n5. Display\nEnter -1 to Exit\n");
+        printf("Choose an option\n1. Add a vertex\n2. Add an edgee\n3. BFS\n4. DFS\n5. Display\n6. Delete Vertex\n7. Delete Edge\nEnter -1 to Exit\n");
         scanf("%d", &choice);
         switch (choice)
         {
@@ -179,6 +310,22 @@ int main(int argc, char const *argv[])
             break;
         case 5:
             display();
+            break;
+        case 6:
+            printf("Enter vertex: ");
+            scanf("%d", &v);
+            deletevertex(v);
+            break;
+        case 7:
+            printf("Enter starting vertex: ");
+            scanf("%d", &sv);
+            printf("Enter ending vertex: ");
+            scanf("%d", &ev);
+            deleteedge(sv, ev);
+            break;
+        case -1:
+            printf("Exiting...\n");
+            exit(0);
             break;
         default:
             printf("Invalid option!\nTry again...\n");
