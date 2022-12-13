@@ -82,12 +82,66 @@ void display(struct node *last)
     } while (p != last->link);
 }
 
+struct node *addtoempty(struct node *last, int n)
+{
+    struct node *tmp;
+    if ((tmp = (struct node *)malloc(sizeof(struct node))) == NULL)
+    {
+        printf("NO mem");
+        exit(1);
+    }
+    tmp->info = n;
+    tmp->link = tmp;
+    last = tmp;
+    return last;
+}
+
+struct node *list1 = NULL, *list2 = NULL;
+void split1(struct node *last)
+{
+    struct node *ptr = last->link;
+    if (ptr != NULL)
+    {
+        if (ptr->info % 2 == 0)
+        {
+            list1 = addtoempty(list1, ptr->info);
+        }
+        else
+        {
+            list2 = addtoempty(list2, ptr->info);
+        }
+        ptr = ptr->link;
+    }
+    if (ptr != last->link)
+    {
+        do
+        {
+            if (ptr->info % 2 == 0)
+            {
+                list1 = addatend(list1, ptr->info);
+            }
+            else
+            {
+                list2 = addatend(list2, ptr->info);
+            }
+            ptr = ptr->link;
+        } while (ptr != last->link);
+    }
+
+    printf("List 1 (Even nodes): ");
+    display(list1);
+    printf("\n");
+    printf("List 2 (Odd nodes): ");
+    display(list2);
+    printf("\n");
+}
+
 int main(int argc, char const *argv[])
 {
     int ch;
     while (1)
     {
-        printf("1. Create\n2. Display\n3. Add at beginning\n4. Add at end\n5. Exit");
+        printf("\n\n1. Create\n2. Display\n3. Add at beginning\n4. Add at end\n5. Split-1");
         printf("\nEnter your choice: ");
         scanf("%d", &ch);
         switch (ch)
@@ -99,11 +153,13 @@ int main(int argc, char const *argv[])
             display(last);
             break;
         case 3:
+        {
             printf("Enter data: ");
             int data;
             scanf("%d", &data);
             last = addatbeg(last, data);
             break;
+        }
         case 4:
             printf("Enter data: ");
             int data;
@@ -111,7 +167,7 @@ int main(int argc, char const *argv[])
             last = addatend(last, data);
             break;
         case 5:
-            exit(0);
+            split1(last);
             break;
         default:
             printf("Invalid choice");

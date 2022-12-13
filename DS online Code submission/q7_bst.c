@@ -124,7 +124,6 @@ void display(struct node *root)
         inorder(root);
         break;
     case 2:
-
         preorder(root);
         break;
     case 3:
@@ -132,7 +131,6 @@ void display(struct node *root)
         postorder(root);
         break;
     default:
-
         printf("Invalid choice");
         break;
     }
