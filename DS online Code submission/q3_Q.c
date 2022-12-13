@@ -23,7 +23,7 @@ struct node *insertatRear()
     if (front == NULL)
     {
         tmp->link = NULL;
-        front=tmp;
+        front = tmp;
         return front;
     }
     while (p->link != NULL)
@@ -62,12 +62,23 @@ void display()
     }
 }
 
+int peek()
+{
+    if (front == NULL)
+    {
+        printf("List is empty\n");
+        return;
+    }
+    int item = front->info;
+    printf("Peeked item: %d\n", item);
+    return item;
+}
+
 int main(int argc, char const *argv[])
 {
-    printf("LL Implementation of queues\n");
     while (1)
     {
-        printf("\n1. Insert\n2. Delete\n3. Display\n4. Exit\n");
+        printf("\n1. Insert\n2. Delete\n3. Display\n4. Peek\n5. Exit\n");
         int choice;
         scanf("%d", &choice);
         switch (choice)
@@ -82,7 +93,11 @@ int main(int argc, char const *argv[])
             display();
             break;
         case 4:
+            peek();
+            break;
+        case 5:
             exit(0);
+            break;
         default:
             printf("Invalid option\n");
             break;
