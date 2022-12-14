@@ -96,6 +96,7 @@ struct node *addtoempty(struct node *last, int n)
     return last;
 }
 
+// SPLIT 1
 struct node *list1 = NULL, *list2 = NULL;
 void split1(struct node *last)
 {
@@ -141,7 +142,7 @@ int main(int argc, char const *argv[])
     int ch;
     while (1)
     {
-        printf("\n\n1. Create\n2. Display\n3. Add at beginning\n4. Add at end\n5. Split-1");
+        printf("\n\n1. Create\n2. Display\n3. Add at beginning\n4. Add at end\n5. Split-1\n7. Exit\n");
         printf("\nEnter your choice: ");
         scanf("%d", &ch);
         switch (ch)
@@ -169,11 +170,15 @@ int main(int argc, char const *argv[])
         case 5:
             split1(last);
             break;
+        case 6:
+            // last = split2(last);
+            break;
+        case 7:
+            exit(0);
         default:
             printf("Invalid choice");
             break;
         }
     }
-
     return 0;
 }
