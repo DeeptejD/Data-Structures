@@ -243,33 +243,53 @@ void deleteedge(int u, int v)
     printf("Edge not present\n");
 }
 
-void deletevertex(int u)
+void deletevertex(int v)
 {
-    struct vertex *locu = findvertex(u);
-    if (locu == NULL)
+    struct vertex *vert = findvertex(v);
+    if (vert == NULL)
     {
-        printf("Vertex not present\n");
-        return;
+        printf("The vertex is not presnt\n");
+        return NULL;
     }
-    struct vertex *ptr = start, *prev = NULL;
+    // first we delete all the incming edges
+    struct vertex *ptr = start;
     while (ptr != NULL)
     {
-        if (ptr == locu)
+        struct edge *temped = ptr->firstedge;
+        while (temped != NULL)
         {
-            if (prev == NULL)
+            if (temped->destvertex == vert)
             {
-                start = ptr->nextvertex;
+                struct edge *deled = temped;
+                temped = temped->nextedge;
+                free(deled);
             }
             else
             {
-                prev->nextvertex = ptr->nextvertex;
+                temped = temped->nextedge;
             }
-            free(ptr);
-            return;
         }
-        prev = ptr;
         ptr = ptr->nextvertex;
     }
+    // now we delete the outgoing edges
+    ptr = vert;
+    struct edge *temp = vert->firstedge;
+    while (temp != NULL)
+    {
+        struct edge *deled = temp;
+        temp = temp->nextedge;
+        free(deled);
+    }
+    ptr = start;
+    struct vertex *par = NULL;
+    while (ptr != vert)
+    {
+        par = ptr;
+        ptr = ptr->nextvertex;
+    }
+    par = ptr->nextvertex;
+    free(ptr);
+    return;
 }
 
 int main(int argc, char const *argv[])
