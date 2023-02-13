@@ -129,7 +129,7 @@ void display()
 
 void BFT()
 {
-    int visited[n];
+    int visited[n]; // here n is the total vertices which in this case is 7
     for (int i = 0; i < n; i++)
     {
         visited[i] = 0;

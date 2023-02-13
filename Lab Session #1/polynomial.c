@@ -14,7 +14,7 @@ void modify(struct node *start);
 struct node *addatpos(struct node *, int, int, int);
 struct node *del(struct node *, int, int);
 struct node *addatend(struct node *, int, int);
-struct node *create_using_file(struct node *);
+// struct node *create_using_file(struct node *);
 
 int main()
 {
@@ -374,32 +374,32 @@ struct node *addatend(struct node *start, int coeff, int exp)
 	return start;
 }
 
-struct node create_using_file(struct node *start)
-{
-	struct node *tmp, *ptr;
-	int num, i;
-	File *fptr;
-	if ((fptr = fopen("input.txt", "r")) == NULL)
-	{
-		printf("The file could not be opened\n");
-		exit(1);
-	}
-	fscanf(fptr, "%d", &num);
-	for (i = 0; i < num; i++)
-	{
-		tmp = (struct node *)malloc(sizeof(struct node));
-		fscanf(fptr, "%d", &tmp->coeff);
-		fscanf(fptr, "%d", &tmp->exp);
-		tmp->next = NULL;
-		if (start == NULL)
-			start = tmp;
-		else
-		{
-			ptr = start;
-			while (ptr->next != NULL)
-				ptr = ptr->next;
-			ptr->next = tmp;
-		}
-	}
-	return start;
-}
+// struct node create_using_file(struct node *start)
+// {
+// 	struct node *tmp, *ptr;
+// 	int num, i;
+// 	// File *fptr;
+// 	if ((fptr = fopen("input.txt", "r")) == NULL)
+// 	{
+// 		printf("The file could not be opened\n");
+// 		exit(1);
+// 	}
+// 	fscanf(fptr, "%d", &num);
+// 	for (i = 0; i < num; i++)
+// 	{
+// 		tmp = (struct node *)malloc(sizeof(struct node));
+// 		fscanf(fptr, "%d", &tmp->coeff);
+// 		fscanf(fptr, "%d", &tmp->exp);
+// 		tmp->next = NULL;
+// 		if (start == NULL)
+// 			start = tmp;
+// 		else
+// 		{
+// 			ptr = start;
+// 			while (ptr->next != NULL)
+// 				ptr = ptr->next;
+// 			ptr->next = tmp;
+// 		}
+// 	}
+// 	return start;
+// }
