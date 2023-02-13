@@ -76,7 +76,7 @@ struct node *insert(struct node *root, int ikey)
     return root;
 }
 
-struct node *in_succ(struct node *ptr)
+struct node *insucc(struct node *ptr)
 {
     if (ptr->rthread == true)
         return ptr->right;
@@ -89,7 +89,7 @@ struct node *in_succ(struct node *ptr)
     }
 }
 
-struct node *in_pred(struct node *ptr)
+struct node *inpred(struct node *ptr)
 {
     if (ptr->lthread == true)
         return ptr->left;
@@ -110,7 +110,7 @@ void inorder(struct node *root)
     while (ptr != NULL)
     {
         printf("%d ", ptr->info);
-        ptr = in_succ(ptr);
+        ptr = insucc(ptr);
     }
 }
 
@@ -118,7 +118,11 @@ struct node *case_a(struct node *root, struct node *par, struct node *ptr)
 {
     struct node *temp = ptr;
     if (par == NULL)
+    {
         root = NULL;
+        free(temp);
+        return root;
+    }
     else
     {
         if (ptr == par->left)
@@ -138,7 +142,7 @@ struct node *case_a(struct node *root, struct node *par, struct node *ptr)
 
 struct node *case_b(struct node *root, struct node *par, struct node *ptr)
 {
-    struct node *p = in_pred(ptr), *s = in_succ(ptr), *temp = ptr, *child;
+    struct node *p = inpred(ptr), *s = insucc(ptr), *temp = ptr, *child;
     // where that one child is
     if (ptr->lthread == false)
         child = ptr->left;
@@ -151,13 +155,13 @@ struct node *case_b(struct node *root, struct node *par, struct node *ptr)
     else
         par->right = child;
 
-// now we fix the threads
-if (ptr->lthread == false) // has a left subtree
-    p->right = s;
-else if (ptr->rthread == false)
-    s->left = p;
-free(temp);
-return root;
+    // now we fix the threads
+    if (ptr->lthread == false) // has a left subtree
+        p->right = s;
+    else if (ptr->rthread == false)
+        s->left = p;
+    free(temp);
+    return root;
 }
 
 struct node *case_c(struct node *root, struct node *par, struct node *ptr)
