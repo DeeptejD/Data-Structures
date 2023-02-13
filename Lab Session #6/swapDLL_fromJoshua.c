@@ -64,7 +64,6 @@ struct node *perform_swap(struct node *start, int l, int r)
 
         // find n2
         n2 = n1->next;
-
         struct node *prev_n1 = n1->prev, *next_n2 = n2->next;
         if (prev_n1 == NULL && next_n2 == NULL)
         {
